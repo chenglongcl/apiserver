@@ -1,0 +1,29 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, build with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+/.idea
+/conf/config.yaml
+/log/*.log
+/public/upload/*
+!/public/upload/index.html
+/apiserver
+
+/cmd/apiserver/conf/config.yaml
+/cmd/apiserver/log/*.log
+/cmd/apiserver/public/upload/*
+!/cmd/apiserver/public/upload/index.html
+/cmd/apiserver/apiserver
+
+/cmd/consumer/conf/config.yaml
+/cmd/consumer/log/*.log
+/cmd/consumer/consumer

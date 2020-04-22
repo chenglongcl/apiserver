@@ -1,0 +1,59 @@
+runmode: debug                 # 开发模式, debug, release, test
+addr: :8080                  # HTTP绑定端口
+name: apiserver              # API Server的名字
+url: http://127.0.0.1:8080   # pingServer函数请求的API服务器的ip:port
+file_domain: http://127.0.0.1:8080 # 静态文件域名
+max_ping_count: 10           # pingServer函数try的次数
+jwt_secret: 4qRnHyI4LGzYrpXdAHBfU0151Dqc8s56
+jwt_exp: 7200 #过期时间单位秒
+jwt_refresh_exp: 1296000 #可刷新令牌时间单位秒
+log:
+  writers: file,stdout
+  logger_level: DEBUG
+  logger_file: log/apiserver.log
+  log_format_text: false
+  rollingPolicy: size
+  log_rotate_date: 1
+  log_rotate_size: 10240
+  log_backup_count: 7
+db: #database 1
+  name: db_apiserver
+  addr: 127.0.0.1:3306
+  username: root
+  password: 123456
+  prefix: tb_
+docker_db: #database 2
+  name: db_apiserver
+  addr: 127.0.0.1:3306
+  username: root
+  password: 123456
+  prefix: tb_
+gormlog: true
+mongo_db:
+  addr: 127.0.0.1:27017
+  source: "admin"
+  username: "admin"
+  password: "123456"
+mongo_docker_db:
+  addr: 127.0.0.1:27017
+  source: "admin"
+  username: "admin"
+  password: "123456"
+redis_conf:
+  network: tcp
+  address: 127.0.0.1:6379
+  password:
+  prefix: "apiserver:"
+upload_path: public/upload/
+aliyun_oss: #aliyunOss
+  access_key_id:
+  access_key_secret:
+  bucket_name:
+  end_point:
+rabbitMQUrl: "amqp://chenglongcl:123456@localhost:5672/"
+rabbitMQDefaultExchange: exch.unitest
+rabbitMQBindings:
+  - routeKey: route.unitest1
+    queue: queue.unitest1
+  - routeKey: route.unitest2
+    queue: queue.unitest2

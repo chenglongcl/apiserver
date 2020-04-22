@@ -1,0 +1,53 @@
+version: "3"
+services:
+  apiserver:
+    build: .
+    image: "go-alpine:latest"
+    container_name: apiserver-container
+    depends_on:
+    - mysql
+    - redis
+    ports:
+    - "8001:8001"
+    networks:
+    - custom
+    expose:
+    - "8001"
+    volumes:
+    - /dockerMaps/tool/wait-for:/go/src/wait-for
+    - /webroot/go/apiserver:/go/src/apiserver
+    command: sh -c 'chmod +x ./wait-for && ./wait-for mysql:3306 redis:6379 && cd apiserver && ./apiserver'
+    restart: always
+  mysql:
+    image: mysql:5.7.21
+    container_name: mysql-5.7.21-container
+    hostname: mysql
+    ports:
+    - "3306:3306"
+    networks:
+    - custom
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      TZ: Asia/Shanghai
+    volumes:
+    - /dockerMaps/data/mysql:/var/lib/mysql
+    - /dockerMaps/conf/mysql:/etc/mysql/conf.d
+    - /dockerMaps/logs/mysql:/logs
+    restart: always
+  redis:
+    image: redis:3.2.12
+    container_name: redis-3.2.12-container
+    hostname: redis
+    ports:
+    - "6379:6379"
+    networks:
+    - custom
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+    - /dockerMaps/data/redis:/data
+    command: redis-server --appendonly yes
+    restart: always
+networks:
+  custom:
+    external: true
