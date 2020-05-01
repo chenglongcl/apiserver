@@ -54,7 +54,7 @@ func main() {
 	mgomodel.Init()
 	defer mgomodel.Close()
 	// init redis
-	redisgo.Init()
+	_ = redisgo.Init()
 	json.Init()
 	//init oss
 	oss.Init()

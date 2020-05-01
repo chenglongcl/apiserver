@@ -62,8 +62,8 @@ func Init() {
 }
 
 func Close() {
-	database.Self.Close()
-	database.Docker.Close()
+	_ = database.Self.Close()
+	_ = database.Docker.Close()
 }
 
 func SelectDB(name string) *gorm.DB {

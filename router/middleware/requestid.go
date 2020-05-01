@@ -10,7 +10,7 @@ func RequestId() gin.HandlerFunc {
 		//Check for incoming header,If X-request-id exists
 		requestId := c.Request.Header.Get("X-Request-ID")
 		if requestId == "" {
-			u4, _ := uuid.NewV4()
+			u4 := uuid.NewV4()
 			requestId = u4.String()
 		}
 
