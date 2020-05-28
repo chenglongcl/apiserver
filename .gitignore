@@ -12,12 +12,16 @@
 *.out
 
 /.idea
+/.DS_Store
 /conf/config.yaml
 /log/*.log
 /public/upload/*
 !/public/upload/index.html
 /apiserver
 
+/cmd/.DS_Store
+/cmd/apiserver/.DS_Store
+/cmd/consumer/.DS_Store
 /cmd/apiserver/conf/config.yaml
 /cmd/apiserver/log/*.log
 /cmd/apiserver/public/upload/*
