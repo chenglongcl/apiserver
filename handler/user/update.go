@@ -4,8 +4,6 @@ import (
 	. "apiserver/handler"
 	"apiserver/pkg/errno"
 	"apiserver/service/userservice"
-	"apiserver/util"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,12 +14,9 @@ func Update(c *gin.Context) {
 		SendResponse(c, errno.ErrBind, nil)
 		return
 	}
-	if err := util.Validate(&r); err != nil {
-		SendResponse(c, errno.ErrValidation, nil)
-		return
-	}
+	userID, _ := c.Get("userID")
 	menuService := userservice.User{
-		ID:       r.ID,
+		ID:       userID.(uint64),
 		Password: r.Password,
 		Mobile:   r.Mobile,
 	}

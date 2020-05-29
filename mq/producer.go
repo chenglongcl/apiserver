@@ -73,14 +73,14 @@ func newProducer(name string, mq *MQ) *Producer {
 	}
 }
 
-func (p Producer) Name() string {
+func (p *Producer) Name() string {
 	return p.name
 }
 
 // CloseChan 仅用于测试使用,勿手动调用
 func (p *Producer) CloseChan() {
 	p.mutex.Lock()
-	p.ch.Close()
+	_ = p.ch.Close()
 	p.mutex.Unlock()
 }
 
@@ -123,7 +123,7 @@ func (p *Producer) Open() error {
 		return fmt.Errorf("MQ: Create channel failed, %v", err)
 	}
 	if err = applyExchangeBinds(ch, p.exchangeBinds); err != nil {
-		ch.Close()
+		_ = ch.Close()
 		return err
 	}
 
@@ -133,7 +133,7 @@ func (p *Producer) Open() error {
 	// 初始化发送Confirm
 	if p.enableConfirm {
 		p.confirmC = make(chan amqp.Confirmation, 1) // channel关闭时自动关闭
-		p.ch.Confirm(false)
+		_ = p.ch.Confirm(false)
 		p.ch.NotifyPublish(p.confirmC)
 		if p.confirm == nil {
 			p.confirm = newConfirmHelper()
@@ -223,7 +223,7 @@ func (p *Producer) keepalive() {
 		// 正常关闭
 		log.Warnf("[WARN] MQ: Producer(%s) shutdown normally.\n", p.name)
 		p.mutex.Lock()
-		p.ch.Close()
+		_ = p.ch.Close()
 		p.state = StateClosed
 		p.mutex.Unlock()
 

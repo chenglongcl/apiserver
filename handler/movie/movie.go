@@ -9,7 +9,7 @@ type CreateRequest struct {
 }
 
 type UpdateRequest struct {
-	ID          string  `json:"id" binding:"required" validate:"len=24"`
+	ID          string  `json:"id" binding:"len=24"`
 	MovieName   string  `json:"movieName" binding:"required"`
 	Description string  `json:"description"`
 	Thumb       string  `json:"thumb"`
@@ -18,7 +18,7 @@ type UpdateRequest struct {
 }
 
 type GetRequest struct {
-	ID string `form:"id" validate:"len=24"`
+	ID string `form:"id" binding:"len=24"`
 }
 
 type GetResponse struct {
@@ -36,5 +36,5 @@ type ListRequest struct {
 }
 
 type DeleteRequest struct {
-	ID string `form:"id" validate:"len=24"`
+	ID string `form:"id" binding:"len=24"`
 }

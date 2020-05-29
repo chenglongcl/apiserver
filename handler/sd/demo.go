@@ -26,7 +26,7 @@ func DemoThree(c *gin.Context) {
 	for i := 0; i < 10; i++ {
 		go func(i int) {
 			msg := mq.NewPublishMsg([]byte(fmt.Sprintf(`{"name":"apiserver-%d"}`, i)))
-			p.Publish("exch.unitest", "route.unitest2", msg)
+			_ = p.Publish("exch.unitest", "route.unitest2", msg)
 		}(i)
 	}
 	SendResponse(c, nil, nil)

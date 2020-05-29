@@ -1,9 +1,9 @@
 package user
 
 type CreateRequest struct {
-	Username string `json:"username" binding:"required" validate:"min=1,max=32"`
-	Password string `json:"password" binding:"required" validate:"min=1,max=128"`
-	Mobile   string `json:"mobile" validate:"numeric,max=11"`
+	Username string `json:"username" binding:"min=1,max=16"`
+	Password string `json:"password" binding:"min=6,max=18"`
+	Mobile   string `json:"mobile" binding:"omitempty,numeric,min=11"`
 }
 
 type CreateResponse struct {
@@ -25,9 +25,8 @@ type GetResponse struct {
 }
 
 type UpdateRequest struct {
-	ID       uint64 `json:"id" binding:"required"`
-	Password string `json:"password" binding:"required" validate:"min=1,max=128"`
-	Mobile   string `json:"mobile" validate:"numeric,max=11"`
+	Password string `json:"password" binding:"omitempty,min=6,max=18"`
+	Mobile   string `json:"mobile" binding:"omitempty,numeric,min=11"`
 }
 
 type DeleteRequest struct {

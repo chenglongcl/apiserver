@@ -54,9 +54,6 @@ func GetMovie(id bson.ObjectId) (*Movie, error) {
 	if err != nil && err != mgo.ErrNotFound {
 		return nil, err
 	}
-	if movie.ID == "" {
-		return nil, nil
-	}
 	return &movie, nil
 }
 
@@ -76,7 +73,7 @@ func GetMovieList(w map[string]interface{}, offset, limit uint64) ([]*Movie, uin
 
 func DeleteMovie(id bson.ObjectId) error {
 	if err := GetSession("self").DB("apiserver").Collection("movie").
-		Remove(bson.M{"_id": id}); err != nil && err != mgo.ErrNotFound {
+		Remove(bson.M{"_id": id}); err != nil {
 		return err
 	}
 	return nil

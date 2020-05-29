@@ -67,14 +67,14 @@ func newConsumer(name string, mq *MQ) *Consumer {
 	}
 }
 
-func (c Consumer) Name() string {
+func (c *Consumer) Name() string {
 	return c.name
 }
 
 // CloseChan 该接口仅用于测试使用, 勿手动调用
 func (c *Consumer) CloseChan() {
 	c.mutex.Lock()
-	c.ch.Close()
+	_ = c.ch.Close()
 	c.mutex.Unlock()
 }
 
@@ -139,7 +139,7 @@ func (c *Consumer) Open() error {
 		return nil
 	}(ch)
 	if err != nil {
-		ch.Close()
+		_ = ch.Close()
 		return fmt.Errorf("MQ: %v", err)
 	}
 
@@ -233,7 +233,7 @@ func (c *Consumer) keepalive() {
 		// 正常关闭
 		log.Warnf("[WARN] Consumer(%s) shutdown normally", c.Name())
 		c.mutex.Lock()
-		c.ch.Close()
+		_ = c.ch.Close()
 		c.ch = nil
 		c.state = StateClosed
 		c.mutex.Unlock()

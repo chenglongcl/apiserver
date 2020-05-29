@@ -153,7 +153,7 @@ func (m *MQ) keepalive() {
 		// 正常关闭
 		log.Warn("[WARN] MQ: Shutdown normally.")
 		m.mutex.Lock()
-		m.conn.Close()
+		_ = m.conn.Close()
 		m.state = StateClosed
 		m.mutex.Unlock()
 
@@ -195,6 +195,6 @@ func (m *MQ) channel() (*amqp.Channel, error) {
 	return m.conn.Channel()
 }
 
-func (m MQ) dial() (*amqp.Connection, error) {
+func (m *MQ) dial() (*amqp.Connection, error) {
 	return amqp.Dial(m.url)
 }

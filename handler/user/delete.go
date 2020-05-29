@@ -4,7 +4,6 @@ import (
 	. "apiserver/handler"
 	"apiserver/pkg/errno"
 	"apiserver/service/userservice"
-	"apiserver/util"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,10 +11,6 @@ func Delete(c *gin.Context) {
 	var r DeleteRequest
 	if err := c.BindQuery(&r); err != nil {
 		SendResponse(c, errno.ErrBind, nil)
-		return
-	}
-	if err := util.Validate(&r); err != nil {
-		SendResponse(c, errno.ErrValidation, nil)
 		return
 	}
 	userService := userservice.User{

@@ -55,16 +55,13 @@ func (a *Movie) Get() (*mgomodel.Movie, *errno.Errno) {
 	if err != nil {
 		return nil, errno.ErrDatabase
 	}
-	if movie == nil {
-		return nil, errno.ErrRecordNotFound
-	}
 	return movie, nil
 }
 
 func (a *Movie) GetList(ps util.PageSetting) ([]*mgomodel.MovieInfo, uint64, *errno.Errno) {
 	w := make(map[string]interface{}, 0)
 	if a.MovieName != "" {
-		w["movie_name"] = bson.RegEx{a.MovieName, ""}
+		w["movie_name"] = bson.RegEx{Pattern: a.MovieName}
 	}
 	movies, count, err := mgomodel.GetMovieList(w, ps.Offset, ps.Limit)
 	if err != nil {
@@ -114,6 +111,9 @@ func (a *Movie) GetList(ps util.PageSetting) ([]*mgomodel.MovieInfo, uint64, *er
 
 func (a *Movie) Delete() *errno.Errno {
 	if err := mgomodel.DeleteMovie(a.ID); err != nil {
+		if err == mgo.ErrNotFound {
+			return errno.ErrRecordNotFound
+		}
 		return errno.ErrDatabase
 	}
 	return nil

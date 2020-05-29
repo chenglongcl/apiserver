@@ -5,7 +5,6 @@ import (
 	"apiserver/pkg/errno"
 	"apiserver/pkg/token"
 	"apiserver/service/userservice"
-	"apiserver/util"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,10 +12,6 @@ func Create(c *gin.Context) {
 	var r CreateRequest
 	if err := c.Bind(&r); err != nil {
 		SendResponse(c, errno.ErrBind, nil)
-		return
-	}
-	if err := util.Validate(&r); err != nil {
-		SendResponse(c, errno.ErrValidation, nil)
 		return
 	}
 	userService := userservice.User{

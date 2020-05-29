@@ -7,5 +7,5 @@ import (
 
 func Ws(c *gin.Context, m *melody.Melody) {
 	//协议升级
-	m.HandleRequest(c.Writer, c.Request)
+	_ = m.HandleRequest(c.Writer, c.Request)
 }

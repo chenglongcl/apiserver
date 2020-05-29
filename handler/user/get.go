@@ -21,6 +21,10 @@ func Get(c *gin.Context) {
 		SendResponse(c, errNo, nil)
 		return
 	}
+	if user.ID == 0 {
+		SendResponse(c, errno.ErrNotUserExist, nil)
+		return
+	}
 	SendResponse(c, nil, GetResponse{
 		ID:         user.ID,
 		Username:   user.Username,

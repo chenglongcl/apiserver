@@ -9,7 +9,7 @@ import (
 
 func Message(m *melody.Melody, s *melody.Session, msg []byte) {
 	var receive Receive
-	jsoniter.Unmarshal(msg, &receive)
+	_ = jsoniter.Unmarshal(msg, &receive)
 	if err := util.Validate(&receive); err != nil {
 		return
 	}

@@ -10,6 +10,7 @@ var (
 	ErrDatabase       = &Errno{Code: 20002, Message: "Database error."}
 	ErrToken          = &Errno{Code: 20003, Message: "Error occurred while signing the JSON web token."}
 	ErrRecordNotFound = &Errno{Code: 20006, Message: "record not found"}
+	ErrObjectIdHex    = &Errno{Code: 20007, Message: "invalid input to ObjectIdHex"}
 
 	// user errors
 	ErrEncrypt           = &Errno{Code: 20101, Message: "Error occurred while encrypting the user password."}
