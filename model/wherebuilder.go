@@ -41,47 +41,43 @@ func WhereBuild(where map[string]interface{}) (whereSQL string, vals []interface
 				whereSQL += fmt.Sprint(k, "=?")
 				vals = append(vals, v)
 			}
-			break
 		case 2:
 			k = ks[0]
 			switch ks[1] {
 			case "=":
 				whereSQL += fmt.Sprint(k, "=?")
 				vals = append(vals, v)
-				break
 			case ">":
 				whereSQL += fmt.Sprint(k, ">?")
 				vals = append(vals, v)
-				break
 			case ">=":
 				whereSQL += fmt.Sprint(k, ">=?")
 				vals = append(vals, v)
-				break
 			case "<":
 				whereSQL += fmt.Sprint(k, "<?")
 				vals = append(vals, v)
-				break
 			case "<=":
 				whereSQL += fmt.Sprint(k, "<=?")
 				vals = append(vals, v)
-				break
 			case "!=":
 				whereSQL += fmt.Sprint(k, "!=?")
 				vals = append(vals, v)
-				break
 			case "<>":
 				whereSQL += fmt.Sprint(k, "!=?")
 				vals = append(vals, v)
-				break
 			case "in":
 				whereSQL += fmt.Sprint(k, " in (?)")
 				vals = append(vals, v)
-				break
+			case "not-in":
+				whereSQL += fmt.Sprint(k, " not in (?)")
+				vals = append(vals, v)
 			case "like":
 				whereSQL += fmt.Sprint(k, " like ?")
 				vals = append(vals, v)
+			case "regexp":
+				whereSQL += fmt.Sprint(k, " REGEXP ?")
+				vals = append(vals, v)
 			}
-			break
 		}
 	}
 	return

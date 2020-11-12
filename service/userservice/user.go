@@ -73,7 +73,7 @@ func (a *User) GetUserList(ps util.PageSetting) ([]*model.UserInfo, uint64, *err
 	if a.Username != "" {
 		w["username like"] = "%" + a.Username + "%"
 	}
-	users, count, err := model.GetUserList(w, ps.Offset, ps.Limit)
+	users, count, err := model.GetUserList(w, "*", ps.Offset, ps.Limit, "id desc")
 	if err != nil {
 		return nil, count, errno.ErrDatabase
 	}

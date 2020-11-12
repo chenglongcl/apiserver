@@ -98,15 +98,21 @@ func DeleteUser(id uint64) error {
 	return SelectDB("self").Where("id = ?", id).Delete(&user).Error
 }
 
-func GetUserList(w map[string]interface{}, offset, limit uint64) ([]*User, uint64, error) {
+func GetUserList(w map[string]interface{}, fields string, offset, limit uint64, order string) ([]*User, uint64, error) {
 	users := make([]*User, 0)
 	var count uint64
 	where, values, _ := WhereBuild(w)
-	if err := SelectDB("self").Model(&User{}).Where(where, values...).Count(&count).Error; err != nil {
+	modelDB := SelectDB("self").Model(&User{})
+	if err := modelDB.Where(where, values...).Count(&count).Error; err != nil {
 		return users, count, err
 	}
-	if err := SelectDB("self").Model(&User{}).Where(where, values...).Offset(offset).Limit(limit).Order("id desc").
-		Find(&users).Error; err != nil {
+	if offset != 0 {
+		modelDB = modelDB.Offset(offset)
+	}
+	if limit != 0 {
+		modelDB = modelDB.Limit(limit)
+	}
+	if err := modelDB.Select(fields).Where(where, values...).Order(order).Find(&users).Error; err != nil {
 		return users, count, err
 	}
 	return users, count, nil
