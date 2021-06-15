@@ -24,8 +24,11 @@
 /cmd/consumer/.DS_Store
 /cmd/apiserver/conf/config.yaml
 /cmd/apiserver/log/*.log
+cmd/apiserver/public/.DS_Store
 /cmd/apiserver/public/upload/*
-!/cmd/apiserver/public/upload/index.html
+!/cmd/apiserver/public/upload/README.MD
+/cmd/apiserver/public/update/*
+!/cmd/apiserver/public/update/README.MD
 /cmd/apiserver/apiserver
 
 /cmd/consumer/conf/config.yaml

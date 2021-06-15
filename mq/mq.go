@@ -20,7 +20,7 @@ package mq
 import (
 	"errors"
 	"fmt"
-	"github.com/lexkong/log"
+	"github.com/chenglongcl/log"
 	"sync"
 	"time"
 

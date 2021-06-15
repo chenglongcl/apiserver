@@ -2,7 +2,7 @@ package producermq
 
 import (
 	"apiserver/mq"
-	"github.com/lexkong/log"
+	"github.com/chenglongcl/log"
 	"github.com/spf13/viper"
 )
 

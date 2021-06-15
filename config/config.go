@@ -1,8 +1,8 @@
 package config
 
 import (
+	"github.com/chenglongcl/log"
 	"github.com/fsnotify/fsnotify"
-	"github.com/lexkong/log"
 	"github.com/spf13/viper"
 
 	"strings"

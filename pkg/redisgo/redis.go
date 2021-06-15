@@ -1,9 +1,9 @@
 package redisgo
 
 import (
+	"github.com/chenglongcl/log"
 	"github.com/chenglongcl/redisgo"
 	"github.com/json-iterator/go"
-	"github.com/lexkong/log"
 	"github.com/spf13/viper"
 )
 

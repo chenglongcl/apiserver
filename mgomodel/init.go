@@ -1,8 +1,8 @@
 package mgomodel
 
 import (
+	"github.com/chenglongcl/log"
 	"github.com/globalsign/mgo"
-	"github.com/lexkong/log"
 	"github.com/spf13/viper"
 )
 

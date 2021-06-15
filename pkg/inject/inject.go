@@ -3,8 +3,8 @@ package inject
 import (
 	"apiserver/service/bll"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
+	"github.com/chenglongcl/log"
 	"github.com/facebookgo/inject"
-	"github.com/lexkong/log"
 )
 
 // Object 注入对象

@@ -14,9 +14,11 @@ import (
 	"apiserver/ws"
 	"errors"
 	"fmt"
+	"github.com/chenglongcl/log"
 	"github.com/gin-gonic/gin"
+	"github.com/jpillora/overseer"
+	"github.com/jpillora/overseer/fetcher"
 	"github.com/json-iterator/go"
-	"github.com/lexkong/log"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"gopkg.in/olahol/melody.v1"
@@ -31,6 +33,15 @@ var (
 )
 
 func main() {
+	overseer.Run(overseer.Config{
+		Program: program,
+		Address: ":8080",
+		Fetcher: &fetcher.File{Path: "public/update/apiserver"},
+		Debug:   false,
+	})
+}
+
+func program(state overseer.State) {
 	pflag.Parse()
 	if *version {
 		info := v.Get()
@@ -83,7 +94,8 @@ func main() {
 		log.Info("The router has been deployed successfully.")
 	}()
 	log.Infof("Start to listening the incoming requests on http address: %s", viper.GetString("addr"))
-	log.Info(http.ListenAndServe(viper.GetString("addr"), g).Error())
+	//log.Info(http.ListenAndServe(viper.GetString("addr"), g).Error())
+	log.Infof(http.Serve(state.Listener, g).Error())
 }
 
 func pingServer() error {
