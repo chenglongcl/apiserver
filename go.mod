@@ -19,6 +19,7 @@ require (
 	github.com/jinzhu/gorm v1.9.16
 	github.com/jpillora/overseer v1.1.6
 	github.com/json-iterator/go v1.1.9
+	github.com/kr/pretty v0.2.1 // indirect
 	github.com/mattn/go-sqlite3 v2.0.1+incompatible // indirect
 	github.com/mitchellh/mapstructure v1.3.0
 	github.com/onsi/ginkgo v1.12.0 // indirect
