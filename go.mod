@@ -14,9 +14,9 @@ require (
 	github.com/facebookgo/structtag v0.0.0-20150214074306-217e25fb9691 // indirect
 	github.com/facebookgo/subset v0.0.0-20200203212716-c811ad88dec4 // indirect
 	github.com/fsnotify/fsnotify v1.4.9
-	github.com/gin-gonic/gin v1.6.2
+	github.com/gin-gonic/gin v1.7.0
 	github.com/globalsign/mgo v0.0.0-20181015135952-eeefdecb41b8
-	github.com/google/wire v0.5.0 // indirect
+	github.com/google/wire v0.5.0
 	github.com/jinzhu/gorm v1.9.16
 	github.com/jpillora/overseer v1.1.6
 	github.com/json-iterator/go v1.1.9
