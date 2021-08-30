@@ -4,6 +4,7 @@ import (
 	"apiserver/handler/movie"
 	"apiserver/handler/oss"
 	"apiserver/handler/sd"
+	"apiserver/handler/search/esuser"
 	"apiserver/handler/upload"
 	"apiserver/handler/user"
 	"apiserver/handler/userprofile"
@@ -53,6 +54,13 @@ func Load(g *gin.Engine, m *melody.Melody, mw ...gin.HandlerFunc) *gin.Engine {
 		apiV1.GET("/movie/get", movie.Get)
 		apiV1.GET("/movie/list", movie.List)
 		apiV1.DELETE("/movie/delete", movie.Delete)
+
+		//elasticsearch
+		apiV1.POST("/elastic/user/create", esuser.Create)
+		apiV1.PUT("/elastic/user/update", esuser.Update)
+		apiV1.DELETE("/elastic/user/delete", esuser.Delete)
+		apiV1.GET("/elastic/user/mGet", esuser.MGet)
+		apiV1.POST("/elastic/user/search", esuser.Search)
 	}
 
 	//The health check handlers

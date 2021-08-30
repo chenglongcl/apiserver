@@ -27,4 +27,13 @@ var (
 	ErrOssGenerateSignatureFail = &Errno{Code: 20204, Message: "AliYunOss Signature fail"}
 	ErrAliYunBucket             = &Errno{Code: 20205, Message: "阿里云OSS Bucket读取失败"}
 	ErrAliYunOssUploadFail      = &Errno{Code: 20205, Message: "阿里云OSS上传失败"}
+
+	//elasticsearch
+	ErrDocumentNotFound = &Errno{Code: 20301, Message: "elasticsearch文档不存在"}
+	ErrDocumentFound    = &Errno{Code: 20302, Message: "elasticsearch文档已存在"}
+	ErrCreateDocument   = &Errno{Code: 20303, Message: "elasticsearch文档创建失败"}
+	ErrUpdateDocument   = &Errno{Code: 20304, Message: "elasticsearch文档更新失败"}
+	ErrDeleteDocument   = &Errno{Code: 20305, Message: "elasticsearch文档删除失败"}
+	ErrGetDocument      = &Errno{Code: 20306, Message: "elasticsearch文档读取失败"}
+	ErrSearchDocument   = &Errno{Code: 20307, Message: "elasticsearch文档搜索失败"}
 )

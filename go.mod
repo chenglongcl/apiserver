@@ -16,12 +16,14 @@ require (
 	github.com/fsnotify/fsnotify v1.4.9
 	github.com/gin-gonic/gin v1.6.2
 	github.com/globalsign/mgo v0.0.0-20181015135952-eeefdecb41b8
+	github.com/google/wire v0.5.0 // indirect
 	github.com/jinzhu/gorm v1.9.16
 	github.com/jpillora/overseer v1.1.6
 	github.com/json-iterator/go v1.1.9
 	github.com/kr/pretty v0.2.1 // indirect
 	github.com/mattn/go-sqlite3 v2.0.1+incompatible // indirect
 	github.com/mitchellh/mapstructure v1.3.0
+	github.com/olivere/elastic/v7 v7.0.27
 	github.com/onsi/ginkgo v1.12.0 // indirect
 	github.com/onsi/gomega v1.9.0 // indirect
 	github.com/pkg/errors v0.9.1
@@ -32,7 +34,7 @@ require (
 	github.com/teris-io/shortid v0.0.0-20171029131806-771a37caa5cf
 	github.com/willf/pad v0.0.0-20200313202418-172aa767f2a4
 	github.com/zxmrlc/log v0.0.0-20200612082315-9e0c7ff11ddb // indirect
-	golang.org/x/crypto v0.0.0-20200429183012-4b2356b1ed79
+	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/go-playground/validator.v9 v9.31.0
 	gopkg.in/olahol/melody.v1 v1.0.0-20170518105555-d52139073376

@@ -57,3 +57,7 @@ rabbitMQBindings:
     queue: queue.unitest1
   - routeKey: route.unitest2
     queue: queue.unitest2
+elasticSearch:
+  address: 127.0.0.1:9200
+  username: "elastic"
+  password: "123456"
