@@ -1,17 +1,21 @@
 package user
 
 import (
-	"github.com/gin-gonic/gin"
-	"apiserver/pkg/token"
-	. "apiserver/handler"
+	"apiserver/handler"
 	"apiserver/pkg/errno"
+	"apiserver/pkg/token"
+	"github.com/gin-gonic/gin"
 )
+
+// Refresh
+// @Description:
+// @param c
 
 func Refresh(c *gin.Context) {
 	if ctx, err, t, e, r := token.ParseRefreshRequest(c); err != nil {
-		SendResponseUnauthorized(c, errno.ErrTokenInvalid, nil)
+		handler.SendResponseUnauthorized(c, errno.ErrTokenInvalid, nil)
 	} else {
-		SendResponse(c, nil, CreateResponse{
+		handler.SendResponse(c, nil, CreateResponse{
 			Username:         ctx.Username,
 			Token:            t,
 			ExpiredAt:        e,

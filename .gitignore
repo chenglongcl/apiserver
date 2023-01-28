@@ -34,3 +34,6 @@ cmd/apiserver/public/.DS_Store
 /cmd/consumer/conf/config.yaml
 /cmd/consumer/log/*.log
 /cmd/consumer/consumer
+
+/cmd/gormgenerate/conf/config.yaml
+/cmd/gormgenerate/log/*.log

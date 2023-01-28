@@ -1,21 +1,20 @@
 package handler
 
 import (
-	"github.com/gin-gonic/gin"
 	"apiserver/pkg/errno"
+	"apiserver/util"
+	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 type Response struct {
 	Code    int         `json:"code"`
 	Message string      `json:"message"`
-	Data    interface{} `json:"data"`
+	Data    interface{} `json:"data,omitempty"`
 }
 
-type ListResponse struct {
-	TotalCount uint64        `json:"total_count"`
-	PageSize   uint64        `json:"page_size"`
-	List       []interface{} `json:"list"`
+type RegularListResponse struct {
+	util.Page
 }
 
 func SendResponse(c *gin.Context, err error, data interface{}) {

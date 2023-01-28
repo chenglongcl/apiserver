@@ -38,3 +38,8 @@ type ListRequest struct {
 	Page     uint64 `form:"page"`
 	Limit    uint64 `form:"limit"`
 }
+
+type LoginRequest struct {
+	Username string `json:"username" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}

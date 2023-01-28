@@ -1,28 +1,30 @@
 package user
 
 import (
-	. "apiserver/handler"
+	"apiserver/handler"
 	"apiserver/pkg/errno"
 	"apiserver/service/userservice"
 	"github.com/gin-gonic/gin"
 )
 
-// Update update a exist user account info.
+// Update
+// @Description:
+// @param c
+
 func Update(c *gin.Context) {
 	var r UpdateRequest
 	if err := c.Bind(&r); err != nil {
-		SendResponse(c, errno.ErrBind, nil)
+		handler.SendResponse(c, errno.ErrBind, nil)
 		return
 	}
-	userID, _ := c.Get("userID")
-	menuService := userservice.User{
-		ID:       userID.(uint64),
-		Password: r.Password,
-		Mobile:   r.Mobile,
-	}
-	if errNo := menuService.Edit(); errNo != nil {
-		SendResponse(c, errNo, nil)
+	userID := c.GetUint64("userID")
+	userService := userservice.NewUserService(c)
+	userService.ID = userID
+	userService.Password = r.Password
+	userService.Mobile = r.Mobile
+	if errNo := userService.Edit(); errNo != nil {
+		handler.SendResponse(c, errNo, nil)
 		return
 	}
-	SendResponse(c, nil, nil)
+	handler.SendResponse(c, nil, nil)
 }

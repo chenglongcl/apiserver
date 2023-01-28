@@ -1,7 +1,7 @@
 package sd
 
 import (
-	. "apiserver/handler"
+	"apiserver/handler"
 	"apiserver/mq"
 	"apiserver/pkg/producermq"
 	"apiserver/service/demoservice"
@@ -10,15 +10,19 @@ import (
 )
 
 func DemoOne(c *gin.Context) {
-	demoService := &demoservice.Demo{}
-	info := demoService.DemoOne()
-	SendResponse(c, nil, info)
+	demoService := demoservice.NewDemoService(c)
+	info, errNo := demoService.DemoOne()
+	if errNo != nil {
+		handler.SendResponse(c, errNo, nil)
+		return
+	}
+	handler.SendResponse(c, nil, info)
 }
 
 func DemoTwo(c *gin.Context) {
-	demoService := &demoservice.Demo{}
+	demoService := demoservice.NewDemoService(c)
 	info := demoService.DemoTwo()
-	SendResponse(c, nil, info)
+	handler.SendResponse(c, nil, info)
 }
 
 func DemoThree(c *gin.Context) {
@@ -29,5 +33,5 @@ func DemoThree(c *gin.Context) {
 			_ = p.Publish("exch.unitest", "route.unitest2", msg)
 		}(i)
 	}
-	SendResponse(c, nil, nil)
+	handler.SendResponse(c, nil, nil)
 }

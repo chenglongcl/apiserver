@@ -3,7 +3,7 @@ package main
 import (
 	"apiserver/config"
 	"apiserver/mgomodel"
-	"apiserver/model"
+	"apiserver/pkg/gormx"
 	"apiserver/pkg/json"
 	"apiserver/pkg/oss"
 	"apiserver/pkg/producermq"
@@ -59,8 +59,8 @@ func program(state overseer.State) {
 		panic(err)
 	}
 	// init mysql db
-	model.Init()
-	defer model.Close()
+	gormx.InitMySQL()
+	defer gormx.Close()
 	// int mongo
 	mgomodel.Init()
 	defer mgomodel.Close()
