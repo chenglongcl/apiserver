@@ -10,7 +10,6 @@ import (
 // Get
 // @Description:
 // @param c
-
 func Get(c *gin.Context) {
 	var r GetRequest
 	if err := c.BindQuery(&r); err != nil {

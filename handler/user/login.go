@@ -14,7 +14,6 @@ import (
 // Login
 // @Description:
 // @param c
-
 func Login(c *gin.Context) {
 	var r LoginRequest
 	if err := c.Bind(&r); err != nil {
@@ -64,7 +63,6 @@ func Login(c *gin.Context) {
 // Logout
 // @Description:
 // @param c
-
 func Logout(c *gin.Context) {
 	userID := c.GetUint64("userID")
 	userTokenService := usertokenservice.NewUserTokenService(c)

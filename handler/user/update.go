@@ -10,7 +10,6 @@ import (
 // Update
 // @Description:
 // @param c
-
 func Update(c *gin.Context) {
 	var r UpdateRequest
 	if err := c.Bind(&r); err != nil {

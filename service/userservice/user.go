@@ -32,7 +32,6 @@ type User = *user
 // @param ctx
 // @param opts
 // @return *User
-
 func NewUserService(ctx *gin.Context, opts ...service.Option) User {
 	opt := new(service.Options)
 	for _, f := range opts {
@@ -49,7 +48,6 @@ func NewUserService(ctx *gin.Context, opts ...service.Option) User {
 // @receiver a
 // @return *apiservermodel.TbUser
 // @return *errno.Errno
-
 func (a User) Add() (*apiservermodel.TbUser, *errno.Errno) {
 	q := apiserverquery.Q
 	qc := apiserverquery.Q.WithContext(a.ctx)
@@ -78,7 +76,6 @@ func (a User) Add() (*apiservermodel.TbUser, *errno.Errno) {
 // @param conditions
 // @return *apiservermodel.TbUser
 // @return *errno.Errno
-
 func (a User) Get(fields []field.Expr, conditions []gen.Condition) (*apiservermodel.TbUser, *errno.Errno) {
 	user, err := apiserverquery.Q.WithContext(a.ctx).TbUser.Select(fields...).Where(conditions...).Take()
 	return user, gormx.HandleError(err)
@@ -89,7 +86,6 @@ func (a User) Get(fields []field.Expr, conditions []gen.Condition) (*apiservermo
 // @receiver a
 // @return *apiservermodel.TbUser
 // @return *errno.Errno
-
 func (a User) GetByID() (*apiservermodel.TbUser, *errno.Errno) {
 	q := apiserverquery.Q
 	qc := apiserverquery.Q.WithContext(a.ctx)
@@ -102,7 +98,6 @@ func (a User) GetByID() (*apiservermodel.TbUser, *errno.Errno) {
 // @receiver a
 // @return *apiservermodel.TbUser
 // @return *errno.Errno
-
 func (a User) GetByUsername() (*apiservermodel.TbUser, *errno.Errno) {
 	q := apiserverquery.Q
 	qc := apiserverquery.Q.WithContext(a.ctx)
@@ -114,7 +109,6 @@ func (a User) GetByUsername() (*apiservermodel.TbUser, *errno.Errno) {
 // @Description:
 // @receiver a
 // @return *errno.Errno
-
 func (a User) Edit() *errno.Errno {
 	var password string
 	if a.Password != "" {
@@ -140,7 +134,6 @@ func (a User) Edit() *errno.Errno {
 // @Description:
 // @receiver a
 // @return *errno.Errno
-
 func (a User) Delete() *errno.Errno {
 	q := apiserverquery.Q
 	qc := apiserverquery.Q.WithContext(a.ctx)
@@ -158,10 +151,8 @@ func (a User) Delete() *errno.Errno {
 // @return []*apiserverentity.UserInfo
 // @return uint64
 // @return *errno.Errno
-
 func (a User) GetUserList(ps util.PageSetting, fields []field.Expr, conditions []gen.Condition, orders []field.Expr) ([]*apiserverentity.UserInfo, uint64, *errno.Errno) {
-	qc := apiserverquery.Q.WithContext(a.ctx)
-	users, count, err := qc.TbUser.Select(fields...).Where(conditions...).Order(orders...).FindByPage(int(ps.Offset), int(ps.Limit))
+	users, count, err := apiserverquery.Q.WithContext(a.ctx).TbUser.Select(fields...).Where(conditions...).Order(orders...).FindByPage(util.MysqlPagination(ps))
 	if errNo := gormx.HandleError(err); errNo != nil {
 		return nil, uint64(count), errNo
 	}

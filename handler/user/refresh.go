@@ -10,7 +10,6 @@ import (
 // Refresh
 // @Description:
 // @param c
-
 func Refresh(c *gin.Context) {
 	if ctx, err, t, e, r := token.ParseRefreshRequest(c); err != nil {
 		handler.SendResponseUnauthorized(c, errno.ErrTokenInvalid, nil)

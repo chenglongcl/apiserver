@@ -27,7 +27,6 @@ type UserToken = *userToken
 // @param ctx
 // @param opts
 // @return UserToken
-
 func NewUserTokenService(ctx *gin.Context, opts ...service.Option) UserToken {
 	opt := new(service.Options)
 	for _, f := range opts {
@@ -44,7 +43,6 @@ func NewUserTokenService(ctx *gin.Context, opts ...service.Option) UserToken {
 // @receiver a
 // @return *apiservermodel.TbUserToken
 // @return *errno.Errno
-
 func (a UserToken) GetByUserID() (*apiservermodel.TbUserToken, *errno.Errno) {
 	q := apiserverquery.Q
 	qc := apiserverquery.Q.WithContext(a.ctx)
@@ -56,7 +54,6 @@ func (a UserToken) GetByUserID() (*apiservermodel.TbUserToken, *errno.Errno) {
 // @Description:
 // @receiver a
 // @return *errno.Errno
-
 func (a UserToken) RecordToken() *errno.Errno {
 	err := apiserverquery.Q.WithContext(a.ctx).TbUserToken.Clauses(clause.OnConflict{
 		Columns: []clause.Column{{Name: "user_id"}},

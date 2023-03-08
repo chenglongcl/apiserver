@@ -7,7 +7,9 @@ import (
 )
 
 func HandleError(err error) *errno.Errno {
-	if err != nil && err != gorm.ErrRecordNotFound {
+	if err == gorm.ErrRecordNotFound {
+		return errno.ErrRecordNotFound
+	} else if err != nil {
 		log.Error("database error", err)
 		return errno.ErrDatabase
 	}

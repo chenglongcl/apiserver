@@ -11,7 +11,6 @@ import (
 // Create
 // @Description:
 // @param c
-
 func Create(c *gin.Context) {
 	var r CreateRequest
 	if err := c.Bind(&r); err != nil {

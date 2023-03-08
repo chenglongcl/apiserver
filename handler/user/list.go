@@ -14,7 +14,6 @@ import (
 // List
 // @Description:
 // @param c
-
 func List(c *gin.Context) {
 	var (
 		r    ListRequest

@@ -10,7 +10,6 @@ import (
 // Delete
 // @Description:
 // @param c
-
 func Delete(c *gin.Context) {
 	var r DeleteRequest
 	if err := c.BindQuery(&r); err != nil {

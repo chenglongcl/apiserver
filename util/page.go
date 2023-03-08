@@ -37,3 +37,10 @@ func PageUtil(count uint64, currentPage uint64, pageSize uint64, list interface{
 	return Page{CurrentPage: currentPage, PageSize: pageSize, TotalPage: tp, TotalCount: count,
 		FirstPage: currentPage == 1, LastPage: currentPage == tp, List: list}
 }
+
+func MysqlPagination(ps PageSetting) (offset, limit int) {
+	if ps.Offset == 0 && ps.Limit == 0 {
+		return 0, -1
+	}
+	return int(ps.Offset), int(ps.Limit)
+}
