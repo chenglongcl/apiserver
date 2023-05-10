@@ -1,7 +1,7 @@
 package user
 
 import (
-	. "apiserver/handler"
+	"apiserver/handler"
 	"apiserver/pkg/errno"
 	"apiserver/service/userservice"
 	"github.com/gin-gonic/gin"
@@ -13,21 +13,21 @@ import (
 func Get(c *gin.Context) {
 	var r GetRequest
 	if err := c.BindQuery(&r); err != nil {
-		SendResponse(c, errno.ErrBind, nil)
+		handler.SendResponse(c, errno.ErrBind, nil)
 		return
 	}
 	userService := userservice.NewUserService(c)
 	userService.ID = r.ID
 	user, errNo := userService.GetByID()
 	if errNo != nil {
-		SendResponse(c, errNo, nil)
+		handler.SendResponse(c, errNo, nil)
 		return
 	}
-	if user.ID == 0 {
-		SendResponse(c, errno.ErrNotUserExist, nil)
+	if user == nil || user.ID == 0 {
+		handler.SendResponse(c, errno.ErrNotUserExist, nil)
 		return
 	}
-	SendResponse(c, nil, GetResponse{
+	handler.SendResponse(c, nil, GetResponse{
 		ID:         user.ID,
 		Username:   user.Username,
 		Mobile:     user.Mobile,

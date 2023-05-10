@@ -52,21 +52,21 @@ func (a User) Add() (*apiservermodel.TbUser, *errno.Errno) {
 	q := apiserverquery.Q
 	qc := apiserverquery.Q.WithContext(a.ctx)
 	var (
-		user *apiservermodel.TbUser
-		err  error
+		userModel *apiservermodel.TbUser
+		err       error
 	)
 	if count, _ := qc.TbUser.Where(q.TbUser.Username.Eq(a.Username)).Unscoped().Count(); count > 0 {
-		return user, errno.ErrUserExist
+		return userModel, errno.ErrUserExist
 	}
 	password, _ := auth.Encrypt(a.Password)
-	user = &apiservermodel.TbUser{
+	userModel = &apiservermodel.TbUser{
 		Username: a.Username,
 		Password: password,
 		Mobile:   a.Mobile,
 		Status:   true,
 	}
-	err = qc.TbUser.Create(user)
-	return user, gormx.HandleError(err)
+	err = qc.TbUser.Create(userModel)
+	return userModel, gormx.HandleError(err)
 }
 
 // Get
@@ -77,8 +77,8 @@ func (a User) Add() (*apiservermodel.TbUser, *errno.Errno) {
 // @return *apiservermodel.TbUser
 // @return *errno.Errno
 func (a User) Get(fields []field.Expr, conditions []gen.Condition) (*apiservermodel.TbUser, *errno.Errno) {
-	user, err := apiserverquery.Q.WithContext(a.ctx).TbUser.Select(fields...).Where(conditions...).Take()
-	return user, gormx.HandleError(err)
+	userModel, err := apiserverquery.Q.WithContext(a.ctx).TbUser.Select(fields...).Where(conditions...).Take()
+	return userModel, gormx.HandleError(err)
 }
 
 // GetByID
@@ -87,10 +87,10 @@ func (a User) Get(fields []field.Expr, conditions []gen.Condition) (*apiservermo
 // @return *apiservermodel.TbUser
 // @return *errno.Errno
 func (a User) GetByID() (*apiservermodel.TbUser, *errno.Errno) {
-	q := apiserverquery.Q
-	qc := apiserverquery.Q.WithContext(a.ctx)
-	user, err := qc.TbUser.Where(q.TbUser.ID.Eq(a.ID)).Take()
-	return user, gormx.HandleError(err)
+	userModel, err := apiserverquery.Q.WithContext(a.ctx).TbUser.Where(
+		apiserverquery.Q.TbUser.ID.Eq(a.ID),
+	).Take()
+	return userModel, gormx.HandleError(err)
 }
 
 // GetByUsername
@@ -99,10 +99,10 @@ func (a User) GetByID() (*apiservermodel.TbUser, *errno.Errno) {
 // @return *apiservermodel.TbUser
 // @return *errno.Errno
 func (a User) GetByUsername() (*apiservermodel.TbUser, *errno.Errno) {
-	q := apiserverquery.Q
-	qc := apiserverquery.Q.WithContext(a.ctx)
-	user, err := qc.TbUser.Where(q.TbUser.Username.Eq(a.Username)).Take()
-	return user, gormx.HandleError(err)
+	userModel, err := apiserverquery.Q.WithContext(a.ctx).TbUser.Where(
+		apiserverquery.Q.TbUser.Username.Eq(a.Username),
+	).Take()
+	return userModel, gormx.HandleError(err)
 }
 
 // Edit
@@ -135,54 +135,51 @@ func (a User) Edit() *errno.Errno {
 // @receiver a
 // @return *errno.Errno
 func (a User) Delete() *errno.Errno {
-	q := apiserverquery.Q
-	qc := apiserverquery.Q.WithContext(a.ctx)
-	_, err := qc.TbUser.Where(q.TbUser.ID.Eq(a.ID)).Delete()
+	_, err := apiserverquery.Q.WithContext(a.ctx).TbUser.Where(
+		apiserverquery.Q.TbUser.ID.Eq(a.ID),
+	).Delete()
 	return gormx.HandleError(err)
 }
 
-// GetUserList
+// InfoList
 // @Description:
 // @receiver a
-// @param ps
-// @param fields
-// @param conditions
-// @param orders
+// @param listParams
 // @return []*apiserverentity.UserInfo
 // @return uint64
 // @return *errno.Errno
-func (a User) GetUserList(ps util.PageSetting, fields []field.Expr, conditions []gen.Condition, orders []field.Expr) ([]*apiserverentity.UserInfo, uint64, *errno.Errno) {
-	users, count, err := apiserverquery.Q.WithContext(a.ctx).TbUser.Select(fields...).Where(conditions...).Order(orders...).FindByPage(util.MysqlPagination(ps))
+func (a User) InfoList(listParams *service.ListParams) ([]*apiserverentity.UserInfo, uint64, *errno.Errno) {
+	userModels, count, err := a.List(listParams)
 	if errNo := gormx.HandleError(err); errNo != nil {
 		return nil, uint64(count), errNo
 	}
 	var ids []uint64
-	for _, user := range users {
-		ids = append(ids, user.ID)
+	for _, userModel := range userModels {
+		ids = append(ids, userModel.ID)
 	}
 	info := make([]*apiserverentity.UserInfo, 0)
 	wg := sync.WaitGroup{}
 	userList := apiserverentity.UserList{
 		Lock:  new(sync.Mutex),
-		IdMap: make(map[uint64]*apiserverentity.UserInfo, len(users)),
+		IdMap: make(map[uint64]*apiserverentity.UserInfo, len(userModels)),
 	}
 	finished := make(chan bool, 1)
-	for _, u := range users {
+	for _, userModel := range userModels {
 		wg.Add(1)
-		go func(user *apiservermodel.TbUser) {
+		go func(userModel *apiservermodel.TbUser) {
 			defer wg.Done()
 			shortId, _ := util.GenShortId()
 			userList.Lock.Lock()
 			defer userList.Lock.Unlock()
-			userList.IdMap[user.ID] = &apiserverentity.UserInfo{
-				ID:          user.ID,
-				Username:    user.Username,
-				Mobile:      user.Mobile,
+			userList.IdMap[userModel.ID] = &apiserverentity.UserInfo{
+				ID:          userModel.ID,
+				Username:    userModel.Username,
+				Mobile:      userModel.Mobile,
 				SayHello:    fmt.Sprintf("Hello %s", shortId),
-				CreatedTime: user.CreatedAt.Format("2006-01-02 15:04:05"),
-				UpdatedTime: user.UpdatedAt.Format("2006-01-02 15:04:05"),
+				CreatedTime: userModel.CreatedAt.Format("2006-01-02 15:04:05"),
+				UpdatedTime: userModel.UpdatedAt.Format("2006-01-02 15:04:05"),
 			}
-		}(u)
+		}(userModel)
 	}
 	go func() {
 		wg.Wait()
@@ -195,4 +192,24 @@ func (a User) GetUserList(ps util.PageSetting, fields []field.Expr, conditions [
 		info = append(info, userList.IdMap[id])
 	}
 	return info, uint64(count), nil
+}
+
+func (a User) List(listParams *service.ListParams) (result []*apiservermodel.TbUser, count int64, err error) {
+	qc := apiserverquery.Q.WithContext(a.ctx).TbUser
+	if listParams.Options.CustomDBOrder != "" {
+		qc = apiserverquery.Q.TbUser.WithContext(a.ctx)
+		qc.ReplaceDB(qc.UnderlyingDB().Order(listParams.Options.CustomDBOrder))
+	}
+	base := qc.Select(listParams.Fields...).Where(listParams.Conditions...).Order(listParams.Orders...)
+	offset, limit := util.MysqlPagination(listParams.PS)
+	if !listParams.Options.WithoutCount {
+		result, count, err = base.FindByPage(offset, limit)
+	} else {
+		if limit == -1 {
+			result, err = base.Find()
+		} else {
+			result, err = base.Offset(offset).Limit(limit).Find()
+		}
+	}
+	return
 }

@@ -104,7 +104,7 @@ func (t *tbArticle) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (t *tbArticle) fillFieldMap() {
-	t.fieldMap = make(map[string]field.Expr, 10)
+	t.fieldMap = make(map[string]field.Expr, 9)
 	t.fieldMap["id"] = t.ID
 	t.fieldMap["uid"] = t.UID
 	t.fieldMap["cate_id"] = t.CateID
@@ -114,7 +114,6 @@ func (t *tbArticle) fillFieldMap() {
 	t.fieldMap["created_at"] = t.CreatedAt
 	t.fieldMap["updated_at"] = t.UpdatedAt
 	t.fieldMap["deleted_at"] = t.DeletedAt
-
 }
 
 func (t tbArticle) clone(db *gorm.DB) tbArticle {

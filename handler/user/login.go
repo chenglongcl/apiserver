@@ -27,7 +27,7 @@ func Login(c *gin.Context) {
 		handler.SendResponse(c, errNo, nil)
 		return
 	}
-	if user.ID == 0 {
+	if user == nil || user.ID == 0 {
 		handler.SendResponse(c, errno.ErrUserNotFound, nil)
 		return
 	}

@@ -4,6 +4,7 @@ import (
 	"apiserver/dal/apiserverdb/apiserverquery"
 	"apiserver/handler"
 	"apiserver/pkg/errno"
+	"apiserver/service"
 	"apiserver/service/userservice"
 	"apiserver/util"
 	"github.com/gin-gonic/gin"
@@ -26,19 +27,26 @@ func List(c *gin.Context) {
 	}
 	ps.Setting(r.Page, r.Limit)
 	userService := userservice.NewUserService(c)
-	fields := make([]field.Expr, 0)
-	conditions := make([]gen.Condition, 0)
-	orders := make([]field.Expr, 0)
-	fields = append(fields, apiserverquery.Q.TbUser.ALL)
-	if r.UserName != "" {
-		conditions = append(conditions, apiserverquery.Q.TbUser.Username.Like(util.StringBuilder("%", r.UserName, "%")))
-	}
-	orders = append(orders, apiserverquery.Q.TbUser.ID.Desc())
-	info, count, errNo := userService.GetUserList(ps, fields, conditions, orders)
+	infos, count, errNo := userService.InfoList(&service.ListParams{
+		PS: ps,
+		Fields: []field.Expr{
+			apiserverquery.Q.TbUser.ALL,
+		},
+		Conditions: append(func() []gen.Condition {
+			conditions := make([]gen.Condition, 0)
+			if r.UserName != "" {
+				conditions = append(conditions, apiserverquery.Q.TbUser.Username.Like(util.StringBuilder("%", r.UserName, "%")))
+			}
+			return conditions
+		}(), []gen.Condition{}...),
+		Orders: []field.Expr{
+			apiserverquery.Q.TbUser.ID.Desc(),
+		},
+	})
 	if errNo != nil {
 		handler.SendResponse(c, errNo, nil)
 		return
 	}
-	resp = handler.RegularListResponse{Page: util.PageUtil(count, ps.Page, ps.Limit, info)}
+	resp = handler.RegularListResponse{Page: util.PageUtil(count, ps.Page, ps.Limit, infos)}
 	handler.SendResponse(c, nil, resp)
 }

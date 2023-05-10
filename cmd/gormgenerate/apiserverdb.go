@@ -75,7 +75,6 @@ func main() {
 	UserToken := g.GenerateModel("tb_user_token",
 		gen.FieldJSONTag("user_id", "userID"))
 	Article := g.GenerateModel("tb_articles",
-		gen.FieldNew("Editor", "string", `gorm:"-"`),
 		gen.FieldType("uid", "uint64"),
 		gen.FieldType("cate_id", "uint64"),
 		gen.FieldJSONTag("cate_id", "cateID"),

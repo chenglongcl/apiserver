@@ -1,13 +1,15 @@
 package demoservice
 
 import (
-	"apiserver/dal/apiserverdb/apiservermodel"
+	"apiserver/dal/apiserverdb/apiserverentity"
 	"apiserver/dal/apiserverdb/apiserverquery"
 	"apiserver/pkg/errno"
-	"apiserver/pkg/gormx"
 	"apiserver/pkg/redisgo"
 	"apiserver/service"
+	"apiserver/service/userservice"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gen"
+	"gorm.io/gen/field"
 )
 
 type Demo struct {
@@ -25,15 +27,29 @@ func NewDemoService(ctx *gin.Context, opts ...service.Option) *Demo {
 		ctx:            ctx,
 	}
 }
-func (a *Demo) DemoOne() (*apiservermodel.TbUser, *errno.Errno) {
-	q := apiserverquery.Q
-	qc := apiserverquery.Q.WithContext(a.ctx)
-	user, err := qc.TbUser.Where(q.TbUser.ID.Eq(1)).Take()
-	if errNo := gormx.HandleError(err); errNo != nil {
-		return user, errNo
+
+func (a *Demo) DemoOne() (*apiserverentity.UserInfo, *errno.Errno) {
+	userService := userservice.NewUserService(a.ctx)
+	user, errNo := userService.Get([]field.Expr{
+		apiserverquery.Q.TbUser.ALL,
+	}, []gen.Condition{
+		apiserverquery.Q.TbUser.ID.Eq(1),
+	})
+	if errNo != nil {
+		return nil, errNo
 	}
-	_, _ = redisgo.My().HSet("testUsers", "1", user)
-	userTwo := apiservermodel.TbUser{}
+	if user == nil || user.ID == 0 {
+		return nil, errno.ErrUserNotFound
+	}
+	_, _ = redisgo.My().HSet("testUsers", "1", apiserverentity.UserInfo{
+		ID:          user.ID,
+		Username:    user.Username,
+		Mobile:      user.Mobile,
+		SayHello:    "hello",
+		CreatedTime: user.CreatedAt.Format("2006-01-02 15:04:05"),
+		UpdatedTime: user.UpdatedAt.Format("2006-01-02 15:04:05"),
+	})
+	userTwo := apiserverentity.UserInfo{}
 	_ = redisgo.My().HGetObject("testUsers", "1", &userTwo)
 	return &userTwo, nil
 }
